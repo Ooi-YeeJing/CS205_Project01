@@ -67,7 +67,7 @@ public:
 	}
 
 	void MultiplyWithoutAMP();
-	void MultiplyWithoutAMPParallel(float** aMatrix, float** bMatrix, float** product);
+	void MultiplyParallel(float** aMatrix, float** bMatrix, float** product);
 	void MultipleWithAMP();
 	void MultipleWithOpenBlasFloat();
 
@@ -91,7 +91,7 @@ void MatrixMul::MultiplyWithoutAMP() {
 	}
 }
 
-void MatrixMul::MultiplyWithoutAMPParallel(float** aMatrix, float** bMatrix, float** productMatrix) {
+void MatrixMul::MultiplyParallel(float** aMatrix, float** bMatrix, float** productMatrix) {
 	int row, col, inner;
 	productMatrix = new float* [aRow] {0};
 	omp_set_num_threads(8);

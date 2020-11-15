@@ -16,7 +16,7 @@ int main()
 	float* aFlatMatrix;
 	float* bFlatMatrix;
 
-	std::cout << "Ooi Yee Jing - Hello World!\n";
+	std::cout << "Ooi Yee Jing - CS205 Project1\n";
 	std::cout << "1. Manually Enter Matrix\n";
 	std::cout << "2. Auto-Generate Matrix\n";
 
@@ -26,46 +26,6 @@ int main()
 	if ((option == 1) || (option == 2))
 	{
 		if (option == 1) {
-			std::cout << "A Row:"; cin >> aRow;
-			std::cout << "A Column:"; cin >> aCol;
-			std::cout << "B Row:"; cin >> bRow;
-			std::cout << "B Column:"; cin >> bCol;
-
-			if (aCol != bRow)
-			{
-				std::cout << "Wrong input";
-				return 1;
-			}
-
-			char temp;
-			long sum_AMatrix_Length = aRow * aCol;
-
-			std::cout << "Matrix B["<< sum_AMatrix_Length <<"]:";
-			aFlatMatrix = new float[sum_AMatrix_Length];
-			for (long i = 0; i < sum_AMatrix_Length; i++) {
-				cin >> temp;
-				if (isdigit(temp))
-					aFlatMatrix[i] = temp;
-
-				else {
-					std::cout << "Wrong input";
-					return 1;
-				}
-			}
-
-			long sum_BMatrix_Length = bRow * bCol;
-
-			std::cout << "Matrix A[" << sum_BMatrix_Length << "]:";
-			bFlatMatrix = new float[sum_BMatrix_Length];
-			for (long i = 0; i < sum_BMatrix_Length; i++) {
-				cin >> temp;
-				if (isdigit(temp))
-					bFlatMatrix[i] = temp;
-				else {
-					std::cout << "Wrong input";
-					return 1;
-				}
-			}
 		}
 		else {
 			aRow = 10;
@@ -87,58 +47,59 @@ int main()
 			for (long i = 0; i < sum_BMatrix_Length; i++)
 				bFlatMatrix[i] = static_cast <float> (rand()) / (static_cast <float> (MAX_RAND));;
 		}
-		
 	}
 	else {
 		std::cout << "Wrong  input";
 		return 1;
 	}
 
-	
+	cout << "Number of elements in each matrixA: " << (aRow * aCol) << endl;
+	cout << "Number of elements in each matrixB: " << (bRow * bCol) << endl << endl;
 
 	// Initialize MatrixMul
 	MatrixMul* matrixMul = new MatrixMul(aRow, aCol, bRow, bCol, aFlatMatrix, bFlatMatrix);
 
+	cout << "Result: " << endl;
 	auto start = std::chrono::steady_clock::now();
-	cout << "MultiplyWithOutAMP" << endl;
+	std::cout << "Multiply Calculation: " << endl;
 	matrixMul->MultiplyWithoutAMP();
+	matrixMul->printProductMatrix();
 	auto end = std::chrono::steady_clock::now();
-	std::cout
-		<< "MultiplyWithOutAMP took "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl;
-
-	matrixMul->printProductMatrix();
+	std::cout << endl;
+	//std::cout
+	//	<< "Multiply Calculation took "
+	//	<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl << endl;
 
 	start = std::chrono::steady_clock::now();
-	cout << "MultiplyWithoutAMPParallel" << endl;
-	matrixMul->MultiplyWithoutAMPParallel(matrixMul->getAMatrix(), matrixMul->getBMatrix(), matrixMul->getProductMatrix());
+	std::cout << "Multiple Parallel: " << endl;
+	matrixMul->MultiplyParallel(matrixMul->getAMatrix(), matrixMul->getBMatrix(), matrixMul->getProductMatrix());
+	matrixMul->printProductMatrix();
 	end = std::chrono::steady_clock::now();
-	std::cout
-		<< "MultiplyWithoutAMPParallel took "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl;
-
-	matrixMul->printProductMatrix();
-
+	std::cout << endl;
+	//std::cout
+	//	<< "Multiple Parallel took "
+	//	<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl << endl;
 
 	start = std::chrono::steady_clock::now();
-	cout << "MultipleWithAMP" << endl;
+	std::cout << "Multiply With AMP: " << endl;
 	matrixMul->MultipleWithAMP();
-	end = std::chrono::steady_clock::now();
-	std::cout
-		<< "MultipleWithAMP took "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl;
-
 	matrixMul->printProductMatrix();
-
+	end = std::chrono::steady_clock::now();
+	std::cout << endl;
+	//std::cout
+	//	<< "Multiply With AMP took "
+	//	<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl << endl;
 
 	start = std::chrono::steady_clock::now();
-	cout << "MultipleWithOpenBlasFloat" << endl;
+	std::cout << "Multiple With OpenBlasFloat: " << endl;
 	matrixMul->MultipleWithOpenBlasFloat();
-	end = std::chrono::steady_clock::now();
-	std::cout
-		<< "MultipleWithOpenBlasFloat took "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl;
-
 	matrixMul->printProductFlat();
+	end = std::chrono::steady_clock::now();
+	std::cout << endl;
+	//std::cout
+	//	<< "Multiple With OpenBlasFloat took "
+	//	<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << endl << endl;
+
+
 
 }
